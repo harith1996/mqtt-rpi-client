@@ -5,8 +5,12 @@ const leds = require("./actuators/leds");
 const dht11 = require("./sensors/dht11");
 const ultrasonic = require("./sensors/ultrasonic");
 const MQTTclient = mqtt.connect(process.env.MQTT_BROKER, {
-  port: process.env.MQTT_PORT || 1883,
+  port: process.env.MQTT_PORT || 1883
 });
+
+if (process.env.SIMULATION == 'true') {
+  console.log('ℹ︎Running in simulation mode')
+}
 
 MQTTclient.on("connect", () => {
   console.log(
