@@ -17,21 +17,22 @@ const setStateLED = (idx, state) => {
     // There has to be data for this to work...
     if (idx == undefined || state == undefined) {
         console.log('⚠️ LED got an invalid state :(');
-        return
+        return false
     }
 
     if (process.env.SIMULATION) {
         console.log(`ℹ︎ We changed LED ${idx} to state ${state}`)
-        return
+        return true
     }
     
     // Make sure the parameters are valid
     if (idx < 0 || idx >= leds.length
         || (state !== 0 && state !== 1)) {
-        return;
+        return false;
     }
 
     leds[idx].digitalWrite(state);
+    return true
 
 };
 

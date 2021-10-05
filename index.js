@@ -20,7 +20,7 @@ MQTTclient.on("connect", () => {
   );
 });
 
-MQTTclient.subscribe(["led"], undefined, (err, granted) => {
+MQTTclient.subscribe(["trigger-led"], undefined, (err, granted) => {
   if (err) {
     console.error("ⅹ Could not subscribe to topics :(");
     process.exit(1);
@@ -30,15 +30,23 @@ MQTTclient.subscribe(["led"], undefined, (err, granted) => {
 });
 
 MQTTclient.on("message", (topic, payload) => {
-  msg = JSON.parse(payload.toString());
-  switch (topic) {
-    // All of the actuators should be listed here...
-    case "led":
-      leds.setStateLED(msg.id, msg.state);
-      break;
-    default:
-      console.log("⚠️ We received a message from an unknown topic");
+  var msg = JSON.parse(payload.toString());
+  if (topic === "trigger-led") {
+    
+    // We change the LED
+    state = leds.setStateLED(msg.id, msg.state);
+
+    // If successful, we publish new LED state
+    if (state) {
+      MQTTclient.publish("led", payload.toString());
+    }
+
+    // } else if (more topics...) {
+
+  } else {
+    console.log("⚠️ We received a message from an unknown topic");
   }
+
 });
 
 dht11.setPublish(MQTTclient, process.env.UPDATE_RATE, process.env.SIMULATION);
