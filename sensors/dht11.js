@@ -1,25 +1,7 @@
 const events = require("events");
 const EventEmitter = new events();
-/**
- * @global
- * @typedef {Object} Humidity
- * @property {String} time - time at which the value was measured
- * @property {Number} humidity - value in percentage
- */
-/**
- * @global
- * @typedef {Object} Temperature
- * @property {String} time - time at which the value was measured
- * @property {Number} temperature - value in degrees Celsius
- */
 
-/**
- * Inits a setInterval routine to measure and publish dht11 readings to MQTT broker
- * @param {MqttClient} client - mqtt client
- * @param {Number} interval - publish interval in milliseconds
- * @param {Boolean} isSimulation - true if app is running in simulation mode
- */
-const setPublish = (MQTTclient, interval, isSimulation) => {
+const setPublish = (mqttBrokers, interval, isSimulation) => {
   let dataPin, dhtType, sensor;
   let time, data = {}; //variables to be published
   if (!isSimulation) {
@@ -61,8 +43,10 @@ const setPublish = (MQTTclient, interval, isSimulation) => {
       time: time,
       temperature: data.temperature,
     });
-    MQTTclient.publish("humidity", humidityMessage, {}, handlePublishError);
-    MQTTclient.publish("temperature", tempMessage, {}, handlePublishError);
+    mqttBrokers.forEach(b => {
+      b.publish("humidity", humidityMessage, {}, handlePublishError);
+      b.publish("temperature", tempMessage, {}, handlePublishError);
+    })
   });
 };
 

@@ -1,19 +1,7 @@
 const events = require("events");
 const EventEmitter = new events();
-/**
- * @global
- * @typedef {Object} Distance
- * @property {String} time - time at which the value was measured
- * @property {Number} value - distance between sensor and closest object in Centimeters
- */
 
-/**
- * Inits a setInterval routine to measure and publish ultrasonic distance readings to MQTT broker
- * @param {MqttClient} client - mqtt client
- * @param {Number} interval - publish interval in milliseconds
- * @param {Boolean} isSimulation - true if app is running in simulation mode
- */
-const setPublish = (MQTTclient, interval, isSimulation) => {
+const setPublish = (mqttBrokers, interval, isSimulation) => {
   let gpio, trigger, echo, db, startTick;
   const MICROSECONDS_PER_CM = 1e6 / 34321;
   let time, distance; //variables to publish
@@ -55,7 +43,9 @@ const setPublish = (MQTTclient, interval, isSimulation) => {
 
   EventEmitter.addListener("distanceDataReady", () => {
     let distanceMessage = JSON.stringify({ time: time, distance: distance });
-    MQTTclient.publish("distance", distanceMessage, handlePublishError);
+    mqttBrokers.forEach(b => {
+      b.publish("distance", distanceMessage, handlePublishError);
+    })
   });
 };
 
