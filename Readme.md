@@ -11,7 +11,7 @@ A simple MQTT client for sending and subscribing to sensor topics on an MQTT bro
 - [Maintainers](#maintainers)
 
 ## MQTT Topics
-Colons can be used to align columns.
+Below is a table of all the topics that the client subscribes ad publishes to, along with data formats
 
 | MQTT Topics        | Format           | Example  |
 | -------------      | -------------    | -----    |
