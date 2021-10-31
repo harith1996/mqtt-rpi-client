@@ -14,7 +14,7 @@ A simple MQTT client for sending and subscribing to sensor topics on an MQTT bro
 Colons can be used to align columns.
 
 | MQTT Topics        | Format           | Example  |
-| -------------      | -------------    | -----:   |
+| -------------      | -------------    | -----    |
 | temperature        | {time: ```timestamp```, temperature: ```value in Celsius```}    | {time: 1635670419952, temperature: 35}    |
 | humidity           | {time: ```timestamp```, humidity: ```value in %```}    | {time: 1635670419952, humidity: 82}    |
 | distance           | {time: ```timestamp```, distance: ```value in cm```}    | {time: 1635670419952, distance: 3}    |
